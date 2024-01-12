@@ -1,0 +1,270 @@
+body {
+    background-image: url('6.jpg'); /* Update with the actual path to your image */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 15px;
+}
+
+.user-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.user-card {
+    border: 1px solid #eceff1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 10px;
+    width: calc(30% - 50px);
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.user-card img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    border: 3px solid #6dd5ed;
+    object-fit: cover;
+}
+
+.user-details {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #424242;
+}
+
+.sign-out-btn {
+    display: block;
+    padding: 10px 20px;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: background-color 0.3s;
+}
+
+.sign-out-btn:hover {
+    background-color: #ff5252;
+}
+
+@media (max-width: 768px) {
+    .user-card {
+      width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .user-card {
+      width: 100%;
+    }
+}
+
+.profile-dropdown {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+    border: none;
+}
+
+.profile-dropdown:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-options {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 58px;
+    min-width: 200px;
+    background-color: #007bff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    overflow: hidden;
+}
+
+.profile-options button,
+.profile-link {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: transparent;
+    color: white;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s;
+}
+
+.profile-options button:last-child,
+.profile-link:last-child {
+    border-bottom: none;
+}
+
+.profile-options button:hover,
+.profile-link:hover {
+    background-color: #0056b3;
+}
+
+button {
+    cursor: pointer;
+    outline: none;
+}
+
+.profile-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+#loadMore {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#loadMore:hover {
+    background-color: #0056b3;
+}
+
+/* Filters Section */
+/* Filter Toggle and Inputs */
+.filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px; /* More space for better visual separation */
+    margin: 20px auto; /* Centered with some margin from other elements */
+    padding: 20px; /* More padding for a larger touch area and better aesthetics */
+    border-radius: 15px; /* Slightly more rounded for a modern look */
+    background: rgba(255, 255, 255, 0.95); /* Less transparency for better readability */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Slightly deeper shadow for a subtle 3D effect */
+    max-width: 800px; /* Max width for better layout control on larger screens */
+    transition: all 0.3s ease; /* Smooth transition for interactive elements */
+}
+
+.filters input[type='text'] {
+    flex: 1 1 180px; /* Flex grow, shrink, and basis set for better responsiveness */
+    padding: 12px 15px; /* Larger padding for a more touch-friendly design */
+    border: 2px solid #e2e2e2; /* Softer color for the border */
+    border-radius: 8px; /* More pronounced rounded corners */
+    font-size: 1rem;
+    background-color: #f9f9f9; /* Slightly off-white background for the inputs */
+    color: #333; /* Darker text for better contrast and readability */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+.filters input[type='text']:focus {
+    border-color: #0096ff; /* A different shade of blue for the focus state */
+    box-shadow: 0 0 0 4px rgba(0, 150, 255, 0.2); /* A subtle outer glow effect */
+}
+
+/* Apply Filter Button Styling */
+.filters button.apply-filter-btn {
+    padding: 12px 20px; /* Slightly larger padding */
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px; /* More rounded corners for the button */
+    cursor: pointer;
+    background-color: #0096ff; /* A vibrant shade of blue */
+    color: white;
+    text-transform: uppercase; /* Uppercase text for a more button-like appearance */
+    letter-spacing: 0.5px; /* Slight spacing between letters for legibility */
+    box-shadow: 0 4px 12px rgba(0, 150, 255, 0.3); /* Subtle shadow for depth */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+}
+
+.filters button.apply-filter-btn:hover {
+    background-color: #0077cc; /* A slightly darker shade on hover for feedback */
+    transform: translateY(-2px); /* Slight raise effect on hover */
+    box-shadow: 0 6px 16px rgba(0, 150, 255, 0.45); /* Deeper shadow on hover for a lifting effect */
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+    .filters {
+        justify-content: space-around;
+    }
+}
+
+@media (max-width: 480px) {
+    .filters {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .filters input[type='text'],
+    .filters button.apply-filter-btn {
+        width: 100%; /* Full width for smaller screens for better touch targets */
+    }
+}
+
+
+
+.view-posts-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    text-decoration: none;
+    margin-left: 420px;
+}
+
+.view-posts-btn:hover {
+    background-color: #0056b3;
+}

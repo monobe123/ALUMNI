@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create a Post</title>
+    <link rel="stylesheet" href="user_post.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+    <script>
+    const firebaseConfig = {
+      // ... Your Firebase configuration
+      apiKey: "AIzaSyCTGgkLiY9mVLXdOdkYZwtkRXgR1eBF23g",
+  authDomain: "alumni-150d5.firebaseapp.com",
+  projectId: "alumni-150d5",
+  storageBucket: "alumni-150d5.appspot.com",
+  messagingSenderId: "464642797756",
+  appId: "1:464642797756:web:2b81c5d09a2caac2b3e0b9",
+  measurementId: "G-VV6KQNKP6W"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+        function savePost(event) {
+            event.preventDefault();
+            const postContent = document.getElementById('postContent').value;
+            const userId = firebase.auth().currentUser.uid;
+
+            // Reference to the user's data
+            const userRef = database.ref('users/' + userId);
+
+            // Adding a new post under the user's data
+            userRef.child('posts').push({
+                content: postContent,
+                timestamp: new Date().toISOString()
+            }).then(() => {
+                alert('Post saved successfully!');
+                document.getElementById('postContent').value = ''; // Clear the textarea
+            }).catch((error) => {
+                console.error("Error saving post:", error);
+            });
+        }
+
+        function deleteAllPosts() {
+            const userId = firebase.auth().currentUser.uid;
+            if (confirm("Are you sure you want to delete all your posts?")) {
+                const userRef = database.ref('users/' + userId + '/posts');
+                userRef.remove()
+                    .then(() => {
+                        alert('All posts deleted successfully!');
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting posts:", error);
+                    });
+            }
+        }
+    </script>
+</head>
+<body>
+    <a href="users_info.html" class="back-to-index-btn">Back</a>
+    <div class="card">
+        <h1>Create a Post</h1>
+        <form id="post-form" onsubmit="savePost(event);">
+            <textarea id="postContent" placeholder="Write your post here..." required></textarea>
+            <button type="submit">Submit Request</button>
+        </form>
+        <br> 
+        <button onclick="deleteAllPosts()">Delete Request </button>
+    </div>
+</body>
+</html>

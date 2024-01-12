@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Change Your Information</title>
+  <link rel="stylesheet" href="change_info.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+  
+  <script>
+    // Your Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyCTGgkLiY9mVLXdOdkYZwtkRXgR1eBF23g",
+  authDomain: "alumni-150d5.firebaseapp.com",
+  projectId: "alumni-150d5",
+  storageBucket: "alumni-150d5.appspot.com",
+  messagingSenderId: "464642797756",
+  appId: "1:464642797756:web:2b81c5d09a2caac2b3e0b9",
+  measurementId: "G-VV6KQNKP6W"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    function saveUserInfo(event) {
+      event.preventDefault(); // Prevent form submission for now
+
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const userId = user.uid;
+        const updates = {};
+
+        // Get the values from the form
+        const formElements = document.getElementById('user-info-form').elements;
+        for (let i = 0; i < formElements.length; i++) {
+          const element = formElements[i];
+          if (element.type !== "submit" && element.type !== "file" && element.value) {
+            updates[element.id] = element.value;
+          }
+        }
+
+        // Handle file input separately
+        const imageInput = document.getElementById('image');
+        const imageFile = imageInput.files[0]; // Get the uploaded file
+
+        const updateDatabase = (imageURL = null) => {
+          if (imageURL) {
+            updates.image = imageURL;
+          }
+          database.ref('users/' + userId).update(updates).then(() => {
+            alert('User information updated successfully!');
+          }).catch((error) => {
+            console.error("Error updating user information:", error);
+          });
+        };
+
+        if (imageFile) {
+          const storageRef = firebase.storage().ref();
+          const imagesRef = storageRef.child('profile_images/' + imageFile.name);
+          imagesRef.put(imageFile).then((snapshot) => {
+            return snapshot.ref.getDownloadURL();
+          }).then((downloadURL) => {
+            updateDatabase(downloadURL);
+          }).catch((error) => {
+            console.error("Error uploading image:", error);
+          });
+        } else {
+          updateDatabase();
+        }
+      } else {
+        alert('No user authenticated!');
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="card">
+    
+    <br>
+    <h1>Change your information</h1>
+    <br>
+    <form id="user-info-form" onsubmit="saveUserInfo(event);">
+      <input type="text" id="name" placeholder="Enter name" >
+      <input type="text" id="lastName" placeholder="Enter last name" >
+      <select id="gender">
+        <option value="" disabled selected>Select Gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+      <input type="text" id="phoneNumber" placeholder="Enter phone number" >
+      <input type="date" id="birthDate" placeholder="Birth Date" >
+      <input type="number" id="age" placeholder="Enter age" >
+      <input type="text" id="identityNumber" placeholder="Enter identity number" >
+      <input type="text" id="city" placeholder="Enter city" >
+      <input type="number" id="yearOfStudy" placeholder="Enter current year of study" >
+      <input type="text" id="university" placeholder="Enter university" >
+      <input type="text" id="yearOfRegistration" placeholder="Enter year of registration" >
+      <input type="text" id="yearOfGraduation" placeholder="Enter year of graduation" >
+      <input type="text" id="major" placeholder="Enter major (e.g., CLE-INFO)" >
+      <input type="text" id="clubs" placeholder="Enter clubs" >
+      <input type="text" id="interests" placeholder="Enter interests" >
+      <input type="text" id="socialNetworks" placeholder="Enter your social networks" >
+      <input type="text" id="currentJob" placeholder="Enter current job" >
+      <input type="text" id="shortbio" placeholder="Short Bio" >
+      <input type="file" id="image" accept="image/*" >
+      <button type="submit">Submit</button>
+    </form>
+    <button type="button" onclick="window.location.href='users_info.html';">Go Back</button>
+  </div>
+</body>
+</html>

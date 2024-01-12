@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="posts_page.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+    <!-- Include Email.js library -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
+    <style>
+        /* Add your custom styles here */
+        .contact-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .contact-button:hover {
+            background-color: #0056b3;
+        }
+
+
+    </style>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            // ...Your Firebase configuration
+            databaseURL: "https://alumni-150d5-default-rtdb.firebaseio.com",
+            apiKey: "AIzaSyCTGgkLiY9mVLXdOdkYZwtkRXgR1eBF23g",
+            authDomain: "alumni-150d5.firebaseapp.com",
+            projectId: "alumni-150d5",
+            storageBucket: "alumni-150d5.appspot.com",
+            messagingSenderId: "464642797756",
+            appId: "1:464642797756:web:2b81c5d09a2caac2b3e0b9",
+            measurementId: "G-VV6KQNKP6W"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        window.onload = () => {
+            displayUsersWithPosts();
+        };
+
+        function displayUsersWithPosts() {
+            firebase.database().ref('users').once('value').then(usersSnapshot => {
+                const usersData = usersSnapshot.val();
+                const usersWithPosts = {};
+
+                // Filter users who have posts
+                for (const userId in usersData) {
+                    if (usersData.hasOwnProperty(userId)) {
+                        if (usersData[userId].hasOwnProperty('posts')) {
+                            usersWithPosts[userId] = usersData[userId];
+                        }
+                    }
+                }
+
+                updateUsersDisplay(usersWithPosts);
+            }).catch(error => {
+                console.error("Error fetching users' data:", error);
+            });
+        }
+
+        function updateUsersDisplay(usersData) {
+            const usersInfoDiv = document.getElementById('users-info');
+            let usersHtml = '';
+
+            for (const userId in usersData) {
+                const userData = usersData[userId];
+                usersHtml += generateUserCardHtml(userData, userId);
+            }
+
+            usersInfoDiv.innerHTML = usersHtml;
+        }
+
+        function generateUserCardHtml(userData, userId) {
+            // Wrap user card in anchor tag to make it clickable
+            let postsHtml = '';
+            if (userData.hasOwnProperty('posts')) {
+                const postsData = userData.posts;
+                postsHtml = '<div class="user-post"><p><strong></strong></p><ul>';
+                for (const postId in postsData) {
+                    if (postsData.hasOwnProperty(postId)) {
+                        postsHtml += `<li>${postsData[postId].content}</li>`;
+                    }
+                }
+                postsHtml += '</ul></div>';
+            }
+
+            return `
+                <div class="user-card">
+                    <div class="user-card-content">
+                        <img src="${userData.image || 'default_image_url'}" alt="Profile Image">
+                        <div class="user-details">
+                            <p><strong>Name :</strong> ${userData.name}</p>
+                            <p><strong>Last Name :</strong> ${userData.lastName}</p>
+                            <p><strong>Major :</strong> ${userData.major}</p>
+                        </div>
+                        <div class="user-card-actions">
+                            <br>
+                            <a href="mailto:${userData.email}" class="contact-button">Send Email</a>
+                        </div>
+                    </div>
+                    ${postsHtml}
+                </div>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <a href="users_info.html" class="back-button">&#8592; Back</a> <!-- Unicode arrow -->
+    <div class="container">
+        <div class="back-button-container">
+            
+        </div>
+        <div id="users-info" class="user-row">
+            <!-- User information will be displayed here -->
+        </div>
+    </div>
+</body>
+</html>

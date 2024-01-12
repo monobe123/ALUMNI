@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url('6.jpg') no-repeat center center fixed; /* Background image from second code */
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.85); /* Background color from second code */
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
+}
+
+.user-card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 15px;
+    margin: 15px;
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.user-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 15px;
+    transition: transform 0.3s;
+}
+
+.user-card:hover img {
+    transform: scale(1.1);
+}
+
+.user-details {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.user-details p {
+    margin: 0;
+}
+
+.user-details p strong {
+    font-weight: bold;
+}
+
+.user-card-content {
+    flex-grow: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    margin-left: 5px;
+}
+
+.user-card-content p {
+    margin: 0;
+}
+
+.user-card-content p:last-child {
+    margin-top: 10px;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 10px 10px;
+    background-color: #7230ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #10d7ff;
+}
