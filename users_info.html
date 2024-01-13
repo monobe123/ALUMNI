@@ -75,9 +75,10 @@
         }
 
         function generateUserCardHtml(userData, userId) {
-        // Wrap user card in anchor tag to make it clickable
-        return `
-            <a href="person.html?userId=${userId}" class="user-card">
+    // Start the user card with user details
+    let userCardHtml = `
+        <div class="user-card">
+            <a href="person.html?userId=${userId}" class="user-card-link">
                 <img src="${userData.image || 'default_image_url'}" alt="Profile Image">
                 <div class="user-details">
                     <p><strong>Name:</strong> ${userData.name}</p>
@@ -86,8 +87,80 @@
                     <p><strong>Major:</strong> ${userData.major}</p>
                 </div>
             </a>
-        `;
-    }
+            <button id="like-btn-${userId}" class="like-btn" onclick="toggleLike(event, '${userId}')">Like👍</button>
+            <span id="likes-count-${userId}">${userData.likes || 0}</span> Likes
+        </div>
+    `;
+
+    // Check if the current user has liked this profile
+    const currentUserId = firebase.auth().currentUser.uid;
+    firebase.database().ref(`likes/${currentUserId}/${userId}`).once('value').then(snapshot => {
+        if (snapshot.exists()) {
+            // If the current user has already liked this profile, disable the like button
+            const likeButton = document.getElementById(`like-btn-${userId}`);
+            if (likeButton) {
+                likeButton.disabled = true;
+                likeButton.innerText = 'Liked👌';
+            }
+        }
+    }).catch(error => {
+        console.error("Error checking like status:", error);
+    });
+
+    return userCardHtml;
+}
+
+function updateLikeStatuses() {
+    const currentUserId = firebase.auth().currentUser.uid;
+
+    // Iterate over all user cards
+    document.querySelectorAll('.like-btn').forEach(btn => {
+        const userId = btn.id.split('-')[2];
+
+        firebase.database().ref(`likes/${currentUserId}/${userId}`).once('value').then(snapshot => {
+            if (snapshot.exists()) {
+                btn.disabled = true;
+                btn.innerText = 'Liked';
+            }
+        }).catch(error => {
+            console.error("Error checking like status:", error);
+        });
+    });
+}
+
+
+
+
+
+
+function toggleLike(event, profileId) {
+    event.stopPropagation();
+    const userId = firebase.auth().currentUser.uid; // Get the ID of the current user
+
+    // Check if the user has already liked this profile
+    firebase.database().ref(`likes/${userId}/${profileId}`).once('value').then(snapshot => {
+        if (snapshot.exists()) {
+            console.log("Already liked this profile");
+        } else {
+            // Record the new like
+            firebase.database().ref(`likes/${userId}/${profileId}`).set(true);
+            incrementLikeCount(profileId);
+        }
+    });
+}
+
+function incrementLikeCount(profileId) {
+    const likesCountElement = document.getElementById(`likes-count-${profileId}`);
+    let likesCount = parseInt(likesCountElement.innerText);
+    likesCount++;
+    firebase.database().ref(`users/${profileId}`).update({ likes: likesCount });
+    likesCountElement.innerText = likesCount;
+}
+
+
+
+
+
 
         function signOut() {
             firebase.auth().signOut().then(() => {
